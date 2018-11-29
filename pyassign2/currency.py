@@ -2,70 +2,47 @@
 This module provides several string parsing functions to implement a 
 simple currency exchange routine using an online currency service. 
 The primary function in this module is exchange."""
-def get(a,b,c):
-    """generate a URL to be used later"""
-    d='http://cs1110.cs.cornell.edu/2016fa/a1server.php?from=currency_from&to=currency_to&amt=amount_from'    
-    e=d.replace('currency_from',a)
-    f=e.replace('currency_to',b)
-    g=f.replace('amount_from',c)
-    return g
-def test_get():
-    """test the function 'get' """
-    a="USD"
-    b="EUR"
-    c="2.5"
-    d1=get(a,b,c)
-    dd1='http://cs1110.cs.cornell.edu/2016fa/a1server.php?from=USD&to=EUR&amt=2.5'
-    assert (d1==dd1)
-    a="BWP"
-    b="NZD"
-    c="4.73"
-    d2=get(a,b,c)
-    dd2='http://cs1110.cs.cornell.edu/2016fa/a1server.php?from=BWP&to=NZD&amt=4.73'
-    assert (d2==dd2)
-    a="CAD"
-    b="CAD"
-    c="10.8"
-    d3=get(a,b,c)
-    dd3='http://cs1110.cs.cornell.edu/2016fa/a1server.php?from=CAD&to=CAD&amt=10.8'
-    assert (d3==dd3)
-def exchange(d):
-    """use the URL to get datas from the website"""
+def exchange(currency_from,currency_to,amount_from ):
+    """generate a URL and use it to get datas from the website"""
+    d='http://cs1110.cs.cornell.edu/2016fa/a1server.php?from=x&to=y&amt=z'    
+    e=d.replace('x',currency_from)
+    f=e.replace('y',currency_to)
+    g=f.replace('z',amount_from)
     from urllib.request import urlopen
-    doc=urlopen(d)
+    doc=urlopen(g)
     docstr=doc.read()
     doc.close()
     jstr=docstr.decode('ascii')
     return jstr
+
 def test_exchange():
     """test the function 'exchange' """
     a="USD"
     b="EUR"
     c="2.5"
-    d1=get(a,b,c)
-    t1=exchange(d1)
+    t1=exchange(a,b,c)
     tt1='{ "from" : "2.5 United States Dollars", "to" : "2.1589225 Euros", "success" : true, "error" : "" }'
     assert (t1==tt1)
     a="BWP"
     b="NZD"
     c="4.73"
-    d2=get(a,b,c)
-    t2=exchange(d2)
+    t2=exchange(a,b,c)
     tt2='{ "from" : "4.73 Botswanan Pula", "to" : "0.66796788832763 New Zealand Dollars", "success" : true, "error" : "" }'
     assert (t2==tt2)
     a="CAD"
     b="CAD"
     c="10.8"
-    d3=get(a,b,c)
-    t3=exchange(d3)
+    t3=exchange(a,b,c)
     tt3='{ "from" : "10.8 Canadian Dollars", "to" : "10.8 Canadian Dollars", "success" : true, "error" : "" }'
     assert (t3==tt3)
-def extract(e):
+def extract(m):
     """output the result in a proper way"""
-    i=e.split('"')
-    h=i[7]"""amount + currency symbol"""
+    i=m.split('"')
+    h=i[7]
+    """amount and currency symbols"""
     j=h.partition(' ')
-    k=j[0]"""amount only"""
+    k=j[0]
+    """amount only"""
     return k
 def test_extract():
     """test the function 'extract' """
@@ -73,16 +50,14 @@ def test_extract():
     a="USD"
     b="EUR"
     c="2.5"
-    d1=get(a,b,c)
-    t1=exchange(d1)
+    t1=exchange(a,b,c)
     i1=extract(t1)
     ii1='2.1589225'
     assert (i1==ii1)
     a="BWP"
     b="NZD"
     c="4.73"
-    d2=get(a,b,c)
-    t2=exchange(d2)
+    t2=exchange(a,b,c)
     i2=extract(t2)
     ii2='0.66796788832763'
     assert (i2==ii2)
@@ -90,14 +65,12 @@ def test_extract():
     a="CAD"
     b="CAD"
     c="10.8"
-    d3=get(a,b,c)
-    t3=exchange(d3)
+    t3=exchange(a,b,c)
     i3=extract(t3)
     ii3='10.8'
     assert (i3==ii3)
 def testAll():
     """test all cases"""
-    test_get()
     test_exchange()
     test_extract()
     print("All tests passed")
@@ -106,8 +79,7 @@ def main():
     x=input()
     y=input()
     z=input()
-    p=get(x,y,z)
-    q=exchange(p)
+    q=exchange(x,y,z)
     s=extract(q)
     print(s)
     testAll() 
