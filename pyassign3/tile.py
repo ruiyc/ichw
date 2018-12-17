@@ -1,5 +1,9 @@
-def pu(m,n,a,b,c,d,ans):
-    """主体铺砖函数"""
+def pu(m,n,a,b,c,oa,ans):
+    """主体铺砖函数
+    其中m、n、a、b为墙和砖的尺寸；
+    c为墙体铺砖情况的记录
+    oa为其中一个答案（one answer）
+    ans为最终答案"""
     if (m*n)%(a*b)!=0:
         return "no"
     else:
@@ -18,6 +22,7 @@ def pu(m,n,a,b,c,d,ans):
                                 x+=1
                                 """横着铺，判断是不是一块砖所覆盖的区域都还没被铺上"""
                 e=[]
+                """每个e都是一块砖"""
                 if i+(b-1)*m+a-1<=m*n-1 and m-i%m>=a and x==a*b:
                     """判断这块砖会不会在下侧及右侧超出墙面，以及是不是满足上面的判断"""
                     for k in range(b):
@@ -25,16 +30,16 @@ def pu(m,n,a,b,c,d,ans):
                             c[j]=1
                             e.append(j)
                             """铺砖"""
-                    d.append(e)
+                    oa.append(e)
                     """记录下每块砖"""
                     if 0 not in c:                      
-                        ans.append(d.copy())
+                        ans.append(oa.copy())
                     else:
-                        pu(m,n,a,b,c,d,ans)
+                        pu(m,n,a,b,c,oa,ans)
                     for k in range(b):
                         for j in range(i+k*m,i+k*m+a):
                             c[j]=0
-                    del d[-1]
+                    del oa[-1]
                     """拆砖"""
                 y=0
                 """开始考虑竖着铺，一切同上"""
@@ -49,17 +54,17 @@ def pu(m,n,a,b,c,d,ans):
                         for j in range(i+k*m,i+k*m+b):
                             c[j]=1
                             e.append(j)
-                    d.append(e)
+                    oa.append(e)
                     if 0 not in c:
-                        ans.append(d.copy())
+                        ans.append(oa.copy())
                     else:
-                        pu(m,n,a,b,c,d,ans)
+                        pu(m,n,a,b,c,oa,ans)
                     for k in range(a):
                         for j in range(i+k*m,i+k*m+b):
                             c[j]=0
-                    del d[-1]
+                    del oa[-1]
         return ans
-def hua(m,n,a,b,l):
+def hua(m,n,a,b,ans):
     import turtle
     """开始生成墙面"""
     p=turtle.Pen()
@@ -94,7 +99,7 @@ def hua(m,n,a,b,l):
     p.color("black")
     p.pensize(3)
     p.left(90)
-    for i in l:
+    for i in ans:
         if (i[-1]-i[0])==(m*(b-1)+(a-1)):
             """判断这块砖是横着铺的"""
             p.penup()
